@@ -139,6 +139,29 @@ function modificar(){
         divMensajes.textContent = "Uno de los valores es menor de 10";
         return;
     }
+    //Actualizar datos
+    contenedorEncontrado.peso = peso;
+    contenedorEncontrado.volumen = volumen;
+
+    let nuevaDensidad = contenedorEncontrado.calcularDensidad();
+
+    let indice = -1;
+    for (let i = 0; i < contenedoresAltaDensidad.length; i++) {
+        if (contenedoresAltaDensidad[i].referencia === referencia) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (nuevaDensidad > 2.5) {
+        if (indice !== -1) {
+            contenedoresAltaDensidad[indice].densidad = nuevaDensidad;
+        } else {
+            let nuevoAltaDensidad = new ContenedorAltaDensidad(referencia, densidad);
+            contenedoresAltaDensidad.push(nuevoAltaDensidad);
+        }
+        divMensajes.textContent = "El contenedor se ha modificado correctamente"
+    }
 }
 
 function calcular(){
