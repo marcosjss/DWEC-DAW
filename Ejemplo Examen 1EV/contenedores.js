@@ -60,6 +60,8 @@ function iniciar() {
     document.getElementById('btnModificar').addEventListener('click', modificar);
     document.getElementById('btnCalcular').addEventListener('click', calcular);
     document.getElementById('btnAltaDensidad').addEventListener('click', mostrarAltaDensidad);
+    document.getElementById('btnContenedores').addEventListener('click', mostrarContenedores);
+    mostrarContenedores();
 }
 
 function anadir(){
@@ -102,6 +104,7 @@ function anadir(){
         let nuevoAltaDensidad = new ContenedorAltaDensidad(referencia, densidad);
         contenedoresAltaDensidad.push(nuevoAltaDensidad);
     }
+    mostrarContenedores()
     divMensajes.textContent = "Contenedor añadido correctamente";
 }
 
@@ -157,11 +160,16 @@ function modificar(){
         if (indice !== -1) {
             contenedoresAltaDensidad[indice].densidad = nuevaDensidad;
         } else {
-            let nuevoAltaDensidad = new ContenedorAltaDensidad(referencia, densidad);
+            let nuevoAltaDensidad = new ContenedorAltaDensidad(referencia, nuevaDensidad);
             contenedoresAltaDensidad.push(nuevoAltaDensidad);
         }
-        divMensajes.textContent = "El contenedor se ha modificado correctamente"
+    } else {
+        if (indice !== -1) {
+            contenedoresAltaDensidad.splice(indice, 1);
+        }
     }
+    mostrarContenedores()
+    divMensajes.textContent = "El contenedor se ha modificado correctamente"
 }
 
 function calcular(){
@@ -197,5 +205,56 @@ function calcular(){
 }
 
 function mostrarAltaDensidad(){
-
+    const tbody = document.getElementById("tablaContenedores");
+    const divMensajes = document.getElementById("mensajes");
+    tbody.innerHTML = `
+            <tr>
+                <td>Referencia</td>
+                <td>Densidad</td>
+            </tr>
+        `;
+    if (contenedoresAltaDensidad.length === 0) {
+        divMensajes.textContent = "No hay contenedores de alta densidad";
+        return;
+    }
+    divMensajes.textContent ="";
+    for (let c of contenedoresAltaDensidad) {
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.referencia}</td>
+                <td>${c.densidad.toFixed(2)}</td>
+            </tr>
+        `;
+    }
+    mostrarContenedores()
 }
+
+function mostrarContenedores() {
+    const tbody = document.getElementById("tablaContenedores");
+    const divMensajes = document.getElementById("mensajes");
+    tbody.innerHTML =`
+            <tr>
+                <td>Referencia</td>
+                <td>Peso</td>
+                <td>Volumen</td>
+                <td>Densidad</td>
+            </tr>
+        `;
+    if (contenedores.length === 0) {
+        divMensajes.textContent = "No hay contenedores";
+        return;
+    }
+    divMensajes.textContent = "";
+    for (let c of contenedores) {
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.referencia}</td>
+                <td>${c.peso}</td>
+                <td>${c.volumen}</td>
+                <td>${c.calcularDensidad().toFixed(2)}</td>
+            </tr>
+        `;
+    }
+}
+
+window.addEventListener("DOMContentLoaded", iniciar);
